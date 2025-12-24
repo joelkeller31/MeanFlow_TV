@@ -31,10 +31,9 @@ def forward_euler_simulator(model, source_samples, n_steps=50):
     return t_space.cpu(), positions.cpu()
 
 
-def plot_and_save_trajectories(models, n_samples=1000, n_steps=100, save_dir="trajectory_plots"):
+def plot_and_save_trajectories(models, n_samples, n_steps, save_dir, p_init, p_target):
     os.makedirs(save_dir, exist_ok=True)
-    p_init = GaussianGenerator(n_dims=2, noise_std=0.5)
-    p_target = CrescentGenerator(R=1.0, r=0.6, d=0.5)
+
 
     src = p_init.generate(n_samples)
     endpoints = {}

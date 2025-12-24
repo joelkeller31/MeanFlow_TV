@@ -22,7 +22,7 @@ class Trainer:
         r = torch.min(s[:, 0], s[:, 1]).unsqueeze(1)
         return t, r
     
-    def calc_loss_batch(self):
+    def calc_loss_batch(self, epoch):
         # generate on CPU then move once to device (your generator may already provide tensors)
         src = self.source.generate(self.batch_size).to(device)
         tgt = self.target.generate(self.batch_size).to(device)
@@ -31,7 +31,7 @@ class Trainer:
         if self.method == 'Original':
             return backward_loss(self.model, src, tgt, t, r)
         else:
-            return combined_loss(self.model, src, tgt, t, r)
+            return combined_loss(self.model, src, tgt, t, r, epoch )
         
 
     
@@ -47,7 +47,7 @@ class Trainer:
             epoch_loss = 0.0
             # Batch metrics for this epoch
             for batch_idx in range(num_batches_per_epoch):
-                loss = self.calc_loss_batch()
+                loss = self.calc_loss_batch(epoch)
                 opt.zero_grad()
                 loss.backward()
                 
